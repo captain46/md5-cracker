@@ -1,0 +1,67 @@
+version: '2'
+
+services:
+  redis:
+      build: redis/
+      networks:
+          internal:
+              ipv4_address: 172.16.201.3
+      hostname: redis
+  broker:
+      build: broker/
+      networks:
+          internal:
+              ipv4_address: 172.16.201.4
+      ports:
+          - "15672:15672"
+      hostname: broker
+  database-worker:
+      build: worker/database
+      depends_on:
+          - broker
+          - redis
+      restart: unless-stopped
+      networks:
+          - internal
+  rainbow-worker:
+      build: worker/rainbow
+      depends_on:
+          - broker
+          - redis
+      restart: unless-stopped
+      networks:
+          - internal
+  bruteforce-worker:
+      build: worker/bruteforce
+      depends_on:
+          - broker
+          - redis
+      restart: unless-stopped
+      networks:
+          - internal
+  frontend:
+      build: frontend/
+      depends_on:
+          - broker
+      restart: unless-stopped
+      networks:
+          - internal
+          - dmz
+      ports:
+          - "8080:8080"
+networks:
+  dmz:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+          - subnet: 172.16.200.0/24
+            gateway: 172.16.200.1
+  internal:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+          - subnet: 172.16.201.0/24
+            gateway: 172.16.201.1
+            ip_range: 172.16.201.5/24

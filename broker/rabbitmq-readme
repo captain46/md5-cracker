@@ -1,0 +1,23 @@
+
+to run rabbitmq install:
+    https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.2/rabbitmq-server-3.6.2-1.noarch.rpm
+
+in addition you will also need erlang:
+    installation guide: https://www.erlang-solutions.com/resources/download.html
+
+
+start rabbitmq-server:
+    service rabbitmq-server start
+
+enable management-plugin
+    rabbitmq-plugins enable rabbitq_management
+
+
+to configure rabbitmq:
+	open the management plugin in your browser (mostly 'localhost:15672')
+	on the bottom via 'Import / export definition' you can upload the 'rabbitmq-configuration.json' file
+
+
+test-section:
+    to test the exchange functionality you have to start consumer-test-worker.js first
+    after that start the producer-test-worker.js script

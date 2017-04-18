@@ -1,0 +1,10 @@
+
+following packages are needed for the node.js server:
+    npm install express --save
+    npm install socket.io --save
+    npm install amqplib
+
+to start the server:
+    node frontend-server.js
+    or
+    supervisor frontend-server.js (only if supervisor is installed)

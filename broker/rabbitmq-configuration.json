@@ -1,0 +1,123 @@
+{
+  "rabbit_version": "3.6.2",
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "/cHluTOmEk4+DT2nvf6lm9ulDFQlTdF+f1Fg6i/Gyo8RJWNE",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    },
+    {
+      "name": "distcomp-md5-cracker",
+      "password_hash": "mElX2S73tSnCv//Wy0kiO1bvmN+rFy9YSXAtwkPQLNS3KakW",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "distcomp-md5-cracker",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "parameters": [],
+  "policies": [],
+  "queues": [
+    {
+      "name": "password-cracker.MD5.database",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "password-cracker.MD5.bruteforce",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "password-cracker.MD5.rainbow",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "password-cracker.response",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "password-cracker",
+      "vhost": "/",
+      "type": "direct",
+      "durable": false,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "password-cracker",
+      "vhost": "/",
+      "destination": "password-cracker.response",
+      "destination_type": "queue",
+      "routing_key": "MD5.bruteforce",
+      "arguments": {}
+    },
+    {
+      "source": "password-cracker",
+      "vhost": "/",
+      "destination": "password-cracker.MD5.rainbow",
+      "destination_type": "queue",
+      "routing_key": "MD5.database",
+      "arguments": {}
+    },
+    {
+      "source": "password-cracker",
+      "vhost": "/",
+      "destination": "password-cracker.MD5.database",
+      "destination_type": "queue",
+      "routing_key": "MD5.frontend",
+      "arguments": {}
+    },
+    {
+      "source": "password-cracker",
+      "vhost": "/",
+      "destination": "password-cracker.MD5.bruteforce",
+      "destination_type": "queue",
+      "routing_key": "MD5.rainbow",
+      "arguments": {}
+    },
+    {
+      "source": "password-cracker",
+      "vhost": "/",
+      "destination": "password-cracker.response",
+      "destination_type": "queue",
+      "routing_key": "found",
+      "arguments": {}
+    }
+  ]
+}
